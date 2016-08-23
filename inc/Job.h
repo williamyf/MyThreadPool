@@ -1,3 +1,5 @@
+#pragma once
+#include "../inc/DllExport.h"
 #include <string>
 
 // CJob
@@ -5,7 +7,7 @@
 // 
 
 class CThread;
-class CJob
+class MYTHREADPOOL_DLL CJob
 {
 public:
 	CJob(void);

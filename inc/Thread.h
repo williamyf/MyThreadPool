@@ -1,3 +1,5 @@
+#pragma once
+#include "../inc/DllExport.h"
 #include <string>
 // CThread
 // 
@@ -18,7 +20,7 @@ enum ThreadState
 
 };
 struct Impl;
-class CThread
+class MYTHREADPOOL_DLL CThread
 {
 public:
 	CThread();

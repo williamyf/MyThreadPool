@@ -1,4 +1,6 @@
 #include "../inc/WorkerThread.h"
+#include "../inc/Job.h"
+#include "../inc/ThreadPool.h"
 
 CWorkerThread::CWorkerThread()
 {
@@ -22,7 +24,9 @@ void CWorkerThread::Run()
 	for (;;)
 	{
 		while (m_Job == NULL)
-			m_JobCond.Wait();
+		{
+		//	m_JobCond.Wait();
+		}
 
 		m_Job->Run(m_JobData);
 		m_Job->SetWorkThread(NULL);
@@ -33,23 +37,24 @@ void CWorkerThread::Run()
 		{
 			m_ThreadPool->DeleteIdleThread(m_ThreadPool->m_IdleList.size() - m_ThreadPool->GetInitNum());
 		}
-		m_WorkMutex.Unlock();
+		m_WorkMutex.unlock();
 	}
 }
 
 void CWorkerThread::SetJob(CJob* job, void* jobdata)
 {
-	m_VarMutex.Lock();
+	m_VarMutex.lock();
 	m_Job = job;
 	m_JobData = jobdata;
 	job->SetWorkThread(this);
-	m_VarMutex.Unlock();
-	m_JobCond.Signal();
+	m_VarMutex.unlock();
+	//m_JobCond.Signal();
+	m_JobCond.notify_all();
 }
 
 void CWorkerThread::SetThreadPool(CThreadPool* thrpool)
 {
-	m_VarMutex.Lock();
+	m_VarMutex.lock();
 	m_ThreadPool = thrpool;
-	m_VarMutex.Unlock();
+	m_VarMutex.unlock();
 }

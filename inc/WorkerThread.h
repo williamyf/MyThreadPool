@@ -1,4 +1,6 @@
+#pragma once
 #include "../inc/Thread.h"
+#include <boost/thread.hpp>
 
 // CWorkerThread
 // 
@@ -23,9 +25,10 @@
 // 
 class CJob;
 class CThreadPool;
-class CThreadMutex;
-class CCondition;
-class CWorkerThread :public CThread
+typedef boost::mutex CThreadMutex;
+typedef boost::condition_variable_any CCondition;
+
+class MYTHREADPOOL_DLL CWorkerThread : public CThread
 {
 private:
 	CThreadPool*  m_ThreadPool;

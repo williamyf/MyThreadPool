@@ -1,4 +1,7 @@
 #include "../inc/ThreadPool.h"
+#include "../inc/WorkerThread.h"
+#include "../inc/Job.h"
+
 CThreadPool::CThreadPool()
 {
 	m_MaxNum = 50;
@@ -51,62 +54,65 @@ void CThreadPool::TerminateAll()
 
 CWorkerThread* CThreadPool::GetIdleThread(void)
 {
-	while (m_IdleList.size() == 0)
-		m_IdleCond.Wait();
+	while (m_IdleList.size() == 0){
+		//m_IdleCond.wait();
+	}
 
-	m_IdleMutex.Lock();
+	m_IdleMutex.lock();
 	if (m_IdleList.size() > 0)
 	{
 		CWorkerThread* thr = (CWorkerThread*)m_IdleList.front();
 		printf("Get Idle thread %dn", thr->GetThreadID());
-		m_IdleMutex.Unlock();
+		m_IdleMutex.unlock();
 		return thr;
 	}
-	m_IdleMutex.Unlock();
+	m_IdleMutex.unlock();
 	return NULL;
 }
 
 //add an idle thread to idle list
 void CThreadPool::AppendToIdleList(CWorkerThread* jobthread)
 {
-	m_IdleMutex.Lock();
+	m_IdleMutex.lock();
 	m_IdleList.push_back(jobthread);
 	m_ThreadList.push_back(jobthread);
-	m_IdleMutex.Unlock();
+	m_IdleMutex.unlock();
 }
 
 //move and idle thread to busy thread
 void CThreadPool::MoveToBusyList(CWorkerThread* idlethread)
 {
-	m_BusyMutex.Lock();
+	m_BusyMutex.lock();
 	m_BusyList.push_back(idlethread);
 	m_AvailNum--;
-	m_BusyMutex.Unlock();
+	m_BusyMutex.unlock();
 
-	m_IdleMutex.Lock();
+	m_IdleMutex.lock();
 	std::vector<CWorkerThread*>::iterator pos;
 	pos = find(m_IdleList.begin(), m_IdleList.end(), idlethread);
 	if (pos != m_IdleList.end())
 		m_IdleList.erase(pos);
-	m_IdleMutex.Unlock();
+	m_IdleMutex.unlock();
 }
 
 void CThreadPool::MoveToIdleList(CWorkerThread* busythread)
 {
-	m_IdleMutex.Lock();
+	m_IdleMutex.lock();
 	m_IdleList.push_back(busythread);
 	m_AvailNum++;
-	m_IdleMutex.Unlock();
+	m_IdleMutex.unlock();
 
-	m_BusyMutex.Lock();
+	m_BusyMutex.lock();
 	std::vector<CWorkerThread*>::iterator pos;
 	pos = find(m_BusyList.begin(), m_BusyList.end(), busythread);
 	if (pos != m_BusyList.end())
 		m_BusyList.erase(pos);
-	m_BusyMutex.Unlock();
+	m_BusyMutex.unlock();
 
-	m_IdleCond.Signal();
-	m_MaxNumCond.Signal();
+	//m_IdleCond.Signal();
+	m_IdleCond.notify_one();
+	//m_MaxNumCond.Signal();
+	m_MaxNumCond.notify_all(); //????
 }
 
 //create num idle thread and put them to idlelist
@@ -117,9 +123,9 @@ void CThreadPool::CreateIdleThread(int num)
 		CWorkerThread* thr = new CWorkerThread();
 		thr->SetThreadPool(this);
 		AppendToIdleList(thr);
-		m_VarMutex.Lock();
+		m_VarMutex.lock();
 		m_AvailNum++;
-		m_VarMutex.Unlock();
+		m_VarMutex.unlock();
 		thr->Start();       //begin the thread,the thread wait for job
 	}
 }
@@ -127,7 +133,7 @@ void CThreadPool::CreateIdleThread(int num)
 void CThreadPool::DeleteIdleThread(int num)
 {
 	printf("Enter into CThreadPool::DeleteIdleThreadn");
-	m_IdleMutex.Lock();
+	m_IdleMutex.lock();
 	printf("Delete Num is %dn", num);
 	for (int i = 0;i < num;i++) 
 	{
@@ -145,7 +151,7 @@ void CThreadPool::DeleteIdleThread(int num)
 		printf("The idle thread available num:%d n", m_AvailNum);
 		printf("The idlelist              num:%d n", m_IdleList.size());
 	}
-	m_IdleMutex.Unlock();
+	m_IdleMutex.unlock();
 }
 
 void CThreadPool::Run(CJob* job, void* jobdata)
@@ -153,7 +159,9 @@ void CThreadPool::Run(CJob* job, void* jobdata)
 	assert(job != NULL);
 	//if the busy thread num adds to m_MaxNum,so we should wait
 	if (GetBusyNum() == m_MaxNum)
-		m_MaxNumCond.Wait();
+	{
+	//	m_MaxNumCond.wait();
+	}
 	if (m_IdleList.size() < m_AvailLow)
 	{
 		if (GetAllNum() + m_InitNum - m_IdleList.size() < m_MaxNum)
@@ -164,7 +172,7 @@ void CThreadPool::Run(CJob* job, void* jobdata)
 	CWorkerThread*  idlethr = GetIdleThread();
 	if (idlethr != NULL)
 	{
-		idlethr->m_WorkMutex.Lock();
+		idlethr->m_WorkMutex.lock();
 		MoveToBusyList(idlethr);
 		idlethr->SetThreadPool(this);
 

@@ -1,4 +1,8 @@
+#pragma once
+#include "../inc/DllExport.h"
 #include <vector>
+#include <boost/thread.hpp>
+
 // CThreadPool
 // 
 // CThreadPool是线程的承载容器，一般可以将其实现为堆栈、单向队列或者双向队列。在我们的系统中我们使用STL Vector对线程进行保存。
@@ -28,9 +32,9 @@
 //		当线程执行完毕后，其会调用MoveToIdleList方法移入空闲链表中，其中还调用m_IdleCond.Signal()方法，唤醒GetIdleThread()中可能阻塞的线程。
 // 
 class CJob;
-class CThreadMutex;
-class CCondition;
-class CThreadPool
+typedef boost::mutex CThreadMutex;
+typedef boost::condition_variable_any CCondition;
+class MYTHREADPOOL_DLL CThreadPool
 {
 	friend class CWorkerThread;
 private:

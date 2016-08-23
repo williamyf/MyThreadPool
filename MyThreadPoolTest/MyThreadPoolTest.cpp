@@ -26,7 +26,7 @@
 // (3)  必须经常面对高突发性事件，比如Web服务器，如果有足球转播，则服务器将产生巨大的冲击。此时如果采取传统方法，
 //		则必须不停的大量产生线程，销毁线程。此时采用动态线程池可以避免这种情况的发生。
 //
-class CXJob :public CJob
+class CXJob : public CJob
 {
 public:
 	CXJob() {}
