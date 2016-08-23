@@ -38,11 +38,11 @@ class MYTHREADPOOL_DLL CThreadPool
 {
 	friend class CWorkerThread;
 private:
-	unsigned int m_MaxNum;   //the max thread num that can create at the same time
-	unsigned int m_AvailLow; //The min num of idle thread that shoule kept
-	unsigned int m_AvailHigh;    //The max num of idle thread that kept at the same time
-	unsigned int m_AvailNum; //the normal thread num of idle num;
-	unsigned int m_InitNum;  //Normal thread num;
+	unsigned int m_MaxNum;		//the max thread num that can create at the same time
+	unsigned int m_AvailLow;	//The min num of idle thread that shoule kept
+	unsigned int m_AvailHigh;	//The max num of idle thread that kept at the same time
+	unsigned int m_AvailNum;	//the normal thread num of idle num;
+	unsigned int m_InitNum;		//Normal thread num;
 protected:
 	CWorkerThread* GetIdleThread(void);
 	void    AppendToIdleList(CWorkerThread* jobthread);

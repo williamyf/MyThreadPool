@@ -1,5 +1,6 @@
 #pragma once
 #include "../inc/DllExport.h"
+//
 // CThreadManage
 // CThreadManage的功能非常简单，其提供最简单的方法，其类定义如下：
 // 
@@ -8,11 +9,11 @@ class CJob;
 class CThreadPool;
 class MYTHREADPOOL_DLL CThreadManage
 {
-public:
-	void     SetParallelNum(int num);
+public:	
 	CThreadManage();
 	CThreadManage(int num);
 	virtual ~CThreadManage();
+	void	SetParallelNum(int num);
 	void    Run(CJob* job, void* jobdata);
 	void    TerminateAll(void);
 private:
