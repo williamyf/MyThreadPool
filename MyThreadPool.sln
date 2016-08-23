@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyThreadPool", "MyThreadPool\MyThreadPool.vcxproj", "{187CA3FE-CA3E-46FE-97C5-8839FF0AF432}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyThreadPoolTest", "MyThreadPoolTest\MyThreadPoolTest.vcxproj", "{34E9E1FB-1ACA-4FE0-9C47-206229500DA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{187CA3FE-CA3E-46FE-97C5-8839FF0AF432}.Release|x64.Build.0 = Release|x64
 		{187CA3FE-CA3E-46FE-97C5-8839FF0AF432}.Release|x86.ActiveCfg = Release|Win32
 		{187CA3FE-CA3E-46FE-97C5-8839FF0AF432}.Release|x86.Build.0 = Release|Win32
+		{34E9E1FB-1ACA-4FE0-9C47-206229500DA2}.Debug|x64.ActiveCfg = Debug|x64
+		{34E9E1FB-1ACA-4FE0-9C47-206229500DA2}.Debug|x64.Build.0 = Debug|x64
+		{34E9E1FB-1ACA-4FE0-9C47-206229500DA2}.Debug|x86.ActiveCfg = Debug|Win32
+		{34E9E1FB-1ACA-4FE0-9C47-206229500DA2}.Debug|x86.Build.0 = Debug|Win32
+		{34E9E1FB-1ACA-4FE0-9C47-206229500DA2}.Release|x64.ActiveCfg = Release|x64
+		{34E9E1FB-1ACA-4FE0-9C47-206229500DA2}.Release|x64.Build.0 = Release|x64
+		{34E9E1FB-1ACA-4FE0-9C47-206229500DA2}.Release|x86.ActiveCfg = Release|Win32
+		{34E9E1FB-1ACA-4FE0-9C47-206229500DA2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
